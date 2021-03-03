@@ -31,4 +31,16 @@ class Converters {
             return localDateTimeFormatter.parse(value, LocalDateTime::from)
         }
     }
+
+    @TypeConverter
+    fun fromListInt(ints: List<Int>?): String? {
+        return ints?.joinToString()
+    }
+
+    @TypeConverter
+    fun toListInt(value: String?): List<Int>? {
+        return value?.let {
+            return value.split(",").map { it.toInt() }
+        }
+    }
 }

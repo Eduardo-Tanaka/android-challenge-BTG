@@ -1,7 +1,7 @@
 package br.com.eduardotanaka.btgchallenge.di.module
 
-import br.com.eduardotanaka.btgchallenge.data.repository.RetrofitTesteRepository
-import br.com.eduardotanaka.btgchallenge.data.repository.RetrofitTesteRepositoryImpl
+import br.com.eduardotanaka.btgchallenge.data.repository.TMDBRepository
+import br.com.eduardotanaka.btgchallenge.data.repository.TMDBRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -14,6 +14,6 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindRetrofitTesteRepository(retrofitTesteRepository: RetrofitTesteRepositoryImpl): RetrofitTesteRepository
+    abstract fun bindTmdbRepository(tmdbRepository: TMDBRepositoryImpl): TMDBRepository
 
 }

@@ -2,7 +2,7 @@ package br.com.eduardotanaka.btgchallenge.constants
 
 enum class CacheKey {
 
-    CACHE_NAME;
+    FILME_POPULAR;
 
     override fun toString(): String {
         return name

@@ -21,7 +21,7 @@ class MainActivity : BaseActivity() {
         binding.textView.text = "view binding"
 
         viewModel.getAll()
-        viewModel.retrofitTesteList.observe(this, {
+        viewModel.filmePopularList.observe(this, {
             if (it.state == StatefulResource.State.SUCCESS && it.hasData()) {
                 Timber.d(it.resource?.data?.toString())
             }

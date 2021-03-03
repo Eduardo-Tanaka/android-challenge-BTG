@@ -10,7 +10,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "br.com.eduardotanaka.setup"
+        applicationId "br.com.eduardotanaka.btgchallenge"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -25,13 +25,15 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "RetrofitTesteUrl", "\"https://5e25087e43dea60014404938.mockapi.io/\"")
+            buildConfigField("String", "TMDBUrl", "\"https://api.themoviedb.org/\"")
+            buildConfigField("String", "TMDBKKey", "\"a5a7ec63fb3fc78cf7a16e8e2b98991d\"")
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            buildConfigField("String", "RetrofitTesteUrl", "\"https://5e25087e43dea60014404938.mockapi.io/\"")
+            buildConfigField("String", "TMDBUrl", "\"https://api.themoviedb.org/\"")
+            buildConfigField("String", "TMDBKKey", "\"a5a7ec63fb3fc78cf7a16e8e2b98991d\"")
         }
     }
 
