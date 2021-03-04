@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
+import br.com.eduardotanaka.btgchallenge.R
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.databinding.LayoutFilmePopularBinding
 import br.com.eduardotanaka.btgchallenge.util.DateTimeUtil.defaultFormatter
@@ -56,7 +57,7 @@ class FilmePopularListAdapter(
             this.filme = filme
 
             Glide.with(context).load("https://image.tmdb.org/t/p/w500/" + this.filme.poster)
-                .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                .fitCenter() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
                 .into(rowView.posterFilme)
 
             rowView.cardFilmeTitulo.text = this.filme.titulo

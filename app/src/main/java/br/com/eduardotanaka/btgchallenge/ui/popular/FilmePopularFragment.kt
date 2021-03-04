@@ -15,6 +15,7 @@ import br.com.eduardotanaka.btgchallenge.databinding.FragmentFilmePopularBinding
 import br.com.eduardotanaka.btgchallenge.ui.MainActivity
 import br.com.eduardotanaka.btgchallenge.ui.MainActivityViewModelImpl
 import br.com.eduardotanaka.btgchallenge.ui.base.StatefulResource
+import br.com.eduardotanaka.btgchallenge.ui.detalhe.DetalheFilmeActivity
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -67,7 +68,7 @@ class FilmePopularFragment : DaggerFragment() {
                         filme: FilmePopular,
                         options: ActivityOptionsCompat
                     ) {
-                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        val intent = Intent(requireContext(), DetalheFilmeActivity::class.java)
                         intent.putExtra(ExtraKey.FILME.toString(), filme)
 
                         startActivity(intent, options.toBundle())
