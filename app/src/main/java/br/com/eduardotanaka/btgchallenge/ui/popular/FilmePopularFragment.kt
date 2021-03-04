@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import br.com.eduardotanaka.btgchallenge.constants.ExtraKey
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.databinding.FragmentFilmePopularBinding
-import br.com.eduardotanaka.btgchallenge.ui.MainActivity
 import br.com.eduardotanaka.btgchallenge.ui.MainActivityViewModelImpl
 import br.com.eduardotanaka.btgchallenge.ui.base.StatefulResource
 import br.com.eduardotanaka.btgchallenge.ui.detalhe.DetalheFilmeActivity

@@ -2,8 +2,10 @@ package br.com.eduardotanaka.btgchallenge.data.repository
 
 import android.content.SharedPreferences
 import br.com.eduardotanaka.btgchallenge.constants.CacheKey
+import br.com.eduardotanaka.btgchallenge.data.model.api.FilmeGeneroResponse
 import br.com.eduardotanaka.btgchallenge.data.model.api.FilmePopularResponse
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
+import br.com.eduardotanaka.btgchallenge.data.model.entity.Genero
 import br.com.eduardotanaka.btgchallenge.data.repository.base.BaseRepository
 import br.com.eduardotanaka.btgchallenge.data.repository.base.Resource
 import br.com.eduardotanaka.btgchallenge.data.repository.helpers.DataFetchHelper
@@ -24,7 +26,7 @@ class TMDBRepositoryImpl @Inject constructor(
             TMDBRepositoryImpl::class.simpleName.toString(),
             sharedPreferences,
             CacheKey.FILME_POPULAR.toString(),
-            "filmes populares",
+            "filmes_populares",
             TimeUnit.HOURS.toSeconds(24 * 1)
         ) {
             override suspend fun getDataFromLocal(): List<FilmePopular>? {
@@ -44,6 +46,53 @@ class TMDBRepositoryImpl @Inject constructor(
                     appDatabase.tmdbDao().insert(data)
                     return true
                 }
+            }
+
+            override suspend fun operateOnDataPostFetch(data: List<FilmePopular>) {
+                getGeneros()
+            }
+        }
+
+        return dataFetchHelper.fetchDataIOAsync().await()
+    }
+
+    override suspend fun getGeneros(): Resource<List<Genero>> {
+        val dataFetchHelper = object : DataFetchHelper.LocalFirstUntilStale<List<Genero>>(
+            TMDBRepositoryImpl::class.simpleName.toString(),
+            sharedPreferences,
+            CacheKey.FILME_GENERO.toString(),
+            "filmes_generos",
+            TimeUnit.HOURS.toSeconds(24 * 1)
+        ) {
+            override suspend fun getDataFromLocal(): List<Genero>? {
+                return appDatabase.generoDao().getAll()
+            }
+
+            override suspend fun getDataFromNetwork(): Response<out Any?> {
+                return tmdbService.getGenres()
+            }
+
+            override suspend fun convertApiResponseToData(response: Response<out Any?>): List<Genero> {
+                return Genero().reflectFrom(response.body() as FilmeGeneroResponse)
+            }
+
+            override suspend fun storeFreshDataToLocal(data: List<Genero>): Boolean {
+                data.let {
+                    appDatabase.generoDao().insert(data)
+                    return true
+                }
+            }
+        }
+
+        return dataFetchHelper.fetchDataIOAsync().await()
+    }
+
+    override suspend fun getGeneroById(id: Int): Resource<Genero> {
+        val dataFetchHelper = object : DataFetchHelper.LocalOnly<Genero>(
+            TMDBRepositoryImpl::class.simpleName.toString(),
+        ) {
+            override suspend fun getDataFromLocal(): Genero {
+                return appDatabase.generoDao().getById(id)
             }
         }
 

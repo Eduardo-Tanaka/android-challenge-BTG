@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import br.com.eduardotanaka.btgchallenge.R
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.databinding.LayoutFilmePopularBinding
@@ -56,7 +57,20 @@ class FilmePopularListAdapter(
         fun bind(filme: FilmePopular) {
             this.filme = filme
 
-            Glide.with(context).load("https://image.tmdb.org/t/p/w500/" + this.filme.poster)
+            // create a ProgressDrawable object which we will show as placeholder
+            val drawable = CircularProgressDrawable(context)
+            drawable.setColorSchemeColors(
+                R.color.purple_500,
+                R.color.purple_700,
+                R.color.purple_200
+            )
+            drawable.centerRadius = 30f
+            drawable.strokeWidth = 5f
+            // set all other properties as you would see fit and start it
+            drawable.start()
+
+            Glide.with(context).load("https://image.tmdb.org/t/p/original/" + this.filme.poster)
+                .placeholder(drawable)
                 .fitCenter() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
                 .into(rowView.posterFilme)
 
