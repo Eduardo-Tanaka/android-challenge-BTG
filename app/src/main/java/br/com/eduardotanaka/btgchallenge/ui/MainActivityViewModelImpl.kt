@@ -29,6 +29,11 @@ class MainActivityViewModelImpl @Inject constructor(
     override val genero: LiveData<StatefulResource<Genero>> =
         mutableGenero
 
+    private val mutableFilmeFavoritoList: MutableLiveData<StatefulResource<List<FilmePopular>>> =
+        MutableLiveData()
+    override val filmeFavoritoList: LiveData<StatefulResource<List<FilmePopular>>> =
+        mutableFilmeFavoritoList
+
     override fun getGeneroById(id: Int) {
         launch {
             mutableGenero.value = StatefulResource.with(StatefulResource.State.LOADING)
@@ -52,6 +57,37 @@ class MainActivityViewModelImpl @Inject constructor(
                             setMessage(R.string.service_error)
                         }
                 else -> mutableGenero.value = StatefulResource<Genero>()
+                    .apply {
+                        setState(StatefulResource.State.SUCCESS)
+                        setMessage(R.string.not_found)
+                    }
+            }
+        }
+    }
+
+    override fun getFavoritos() {
+        launch {
+            mutableFilmeFavoritoList.value = StatefulResource.with(StatefulResource.State.LOADING)
+            val resource = tmdbRepository.getAllFavoritos()
+            when {
+                resource.hasData() -> {
+                    //return the value
+                    mutableFilmeFavoritoList.value = StatefulResource.success(resource)
+                }
+                resource.isNetworkIssue() -> {
+                    mutableFilmeFavoritoList.value = StatefulResource<List<FilmePopular>>()
+                        .apply {
+                            setMessage(R.string.no_network_connection)
+                            setState(StatefulResource.State.ERROR_NETWORK)
+                        }
+                }
+                resource.isApiIssue() -> //TODO 4xx isn't necessarily a service error, expand this to sniff http code before saying service error
+                    mutableFilmeFavoritoList.value = StatefulResource<List<FilmePopular>>()
+                        .apply {
+                            setState(StatefulResource.State.ERROR_API)
+                            setMessage(R.string.service_error)
+                        }
+                else -> mutableFilmeFavoritoList.value = StatefulResource<List<FilmePopular>>()
                     .apply {
                         setState(StatefulResource.State.SUCCESS)
                         setMessage(R.string.not_found)

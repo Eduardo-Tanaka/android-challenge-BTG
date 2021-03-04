@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import br.com.eduardotanaka.btgchallenge.constants.CacheKey
 import br.com.eduardotanaka.btgchallenge.data.model.api.FilmeGeneroResponse
 import br.com.eduardotanaka.btgchallenge.data.model.api.FilmePopularResponse
+import br.com.eduardotanaka.btgchallenge.data.model.entity.Favorito
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.data.model.entity.Genero
 import br.com.eduardotanaka.btgchallenge.data.repository.base.BaseRepository
@@ -93,6 +94,51 @@ class TMDBRepositoryImpl @Inject constructor(
         ) {
             override suspend fun getDataFromLocal(): Genero {
                 return appDatabase.generoDao().getById(id)
+            }
+        }
+
+        return dataFetchHelper.fetchDataIOAsync().await()
+    }
+
+    override suspend fun getFavorito(id: Int): Resource<Favorito> {
+        val dataFetchHelper = object : DataFetchHelper.LocalOnly<Favorito>(
+            TMDBRepositoryImpl::class.simpleName.toString(),
+        ) {
+            override suspend fun getDataFromLocal(): Favorito {
+                return appDatabase.favoritoDao().getById(id)
+            }
+        }
+
+        return dataFetchHelper.fetchDataIOAsync().await()
+    }
+
+    override suspend fun favorita(favorito: Favorito): Resource<Favorito> {
+        val dataFetchHelper = object : DataFetchHelper.LocalOnly<Favorito>(
+            TMDBRepositoryImpl::class.simpleName.toString(),
+        ) {
+            override suspend fun getDataFromLocal(): Favorito {
+                return appDatabase.favoritoDao()
+                    .getById(appDatabase.favoritoDao().insert(favorito).toInt())
+            }
+        }
+
+        return dataFetchHelper.fetchDataIOAsync().await()
+    }
+
+    override suspend fun getAllFavoritos(): Resource<List<FilmePopular>> {
+        val dataFetchHelper = object : DataFetchHelper.LocalOnly<List<FilmePopular>>(
+            TMDBRepositoryImpl::class.simpleName.toString(),
+        ) {
+            override suspend fun getDataFromLocal(): List<FilmePopular> {
+                return getFimesFavoritos(appDatabase.favoritoDao().getAll())
+            }
+
+            fun getFimesFavoritos(favoritos: List<Favorito>): List<FilmePopular> {
+                val ids = ArrayList<Int>()
+                favoritos.forEach {
+                    ids.add(it.movieId)
+                }
+                return appDatabase.tmdbDao().getAllByIds(ids)
             }
         }
 

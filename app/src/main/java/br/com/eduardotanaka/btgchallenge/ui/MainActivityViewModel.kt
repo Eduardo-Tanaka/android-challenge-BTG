@@ -15,4 +15,7 @@ interface MainActivityViewModel {
 
     val genero: LiveData<StatefulResource<Genero>>
     fun getGeneroById(id: Int)
+
+    val filmeFavoritoList: LiveData<StatefulResource<List<FilmePopular>>>
+    fun getFavoritos()
 }

@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import br.com.eduardotanaka.btgchallenge.R
 import br.com.eduardotanaka.btgchallenge.constants.ExtraKey
+import br.com.eduardotanaka.btgchallenge.data.model.entity.Favorito
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.databinding.ActivityDetalheFilmeBinding
 import br.com.eduardotanaka.btgchallenge.ui.MainActivityViewModelImpl
@@ -13,10 +14,10 @@ import br.com.eduardotanaka.btgchallenge.ui.base.StatefulResource
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 
-
 class DetalheFilmeActivity : BaseActivity() {
 
     private val viewModel by viewModels<MainActivityViewModelImpl> { factory }
+    private val viewModelFavorito by viewModels<DetalheFilmeActivityViewModelImpl> { factory }
 
     private lateinit var binding: ActivityDetalheFilmeBinding
 
@@ -66,5 +67,45 @@ class DetalheFilmeActivity : BaseActivity() {
         filme?.generos?.map {
             viewModel.getGeneroById(it)
         }
+
+        viewModelFavorito.isFavorito(filme!!.movieId)
+        viewModelFavorito.favorito.observe(this, { result ->
+            if (result.state == StatefulResource.State.SUCCESS) {
+                if (result.resource?.data?.isFavorito == true) {
+                    binding.btnFavoritar.setImageResource(R.drawable.ic_favorite_24px)
+                } else {
+                    binding.btnFavoritar.setImageResource(R.drawable.ic_favorite_border_24px)
+                }
+
+                binding.btnFavoritar.setOnClickListener {
+                    val favoritar = if (result.resource == null) {
+                        true
+                    } else {
+                        !result.resource?.data?.isFavorito!!
+                    }
+                    viewModelFavorito.favoritaFilme(
+                        Favorito(
+                            filme.movieId,
+                            favoritar
+                        )
+                    )
+                }
+            }
+        })
     }
+
+    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_filme, menu);
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favorito -> {
+                true
+            }
+            else -> false
+        }
+    }*/
 }

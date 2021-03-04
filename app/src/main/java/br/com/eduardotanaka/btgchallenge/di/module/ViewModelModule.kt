@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import br.com.eduardotanaka.btgchallenge.di.ViewModelFactory
 import br.com.eduardotanaka.btgchallenge.di.ViewModelKey
 import br.com.eduardotanaka.btgchallenge.ui.MainActivityViewModelImpl
+import br.com.eduardotanaka.btgchallenge.ui.detalhe.DetalheFilmeActivityViewModelImpl
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -24,5 +25,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainActivityViewModelImpl::class)
     abstract fun bindMainActivityViewModel(mainActivityViewModelImpl: MainActivityViewModelImpl): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetalheFilmeActivityViewModelImpl::class)
+    abstract fun bindDetalheFilmeActivityViewModel(detalheFilmeActivityViewModelImpl: DetalheFilmeActivityViewModelImpl): ViewModel
 
 }
