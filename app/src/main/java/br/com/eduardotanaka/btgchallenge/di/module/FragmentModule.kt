@@ -1,7 +1,7 @@
 package br.com.eduardotanaka.btgchallenge.di.module
 
-import br.com.eduardotanaka.btgchallenge.ui.FilmeFavoritoFragment
-import br.com.eduardotanaka.btgchallenge.ui.FilmePopularFragment
+import br.com.eduardotanaka.btgchallenge.ui.favorito.FilmeFavoritoFragment
+import br.com.eduardotanaka.btgchallenge.ui.popular.FilmePopularFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -2,8 +2,11 @@ package br.com.eduardotanaka.btgchallenge.ui
 
 import android.os.Bundle
 import br.com.eduardotanaka.btgchallenge.R
+import br.com.eduardotanaka.btgchallenge.constants.TabLayoutFilmeKey
 import br.com.eduardotanaka.btgchallenge.databinding.ActivityMainBinding
 import br.com.eduardotanaka.btgchallenge.ui.base.BaseActivity
+import br.com.eduardotanaka.btgchallenge.ui.favorito.FilmeFavoritoFragment
+import br.com.eduardotanaka.btgchallenge.ui.popular.FilmePopularFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : BaseActivity() {
@@ -24,11 +27,11 @@ class MainActivity : BaseActivity() {
         TabLayoutMediator(binding.tabLayoutFilme, binding.viewPagerFilme) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = "POPULAR"
+                    tab.text = TabLayoutFilmeKey.POPULAR.toString()
                     tab.icon = getDrawable(R.drawable.ic_local_movies_24px)
                 }
                 1 -> {
-                    tab.text = "FAVORITO"
+                    tab.text = TabLayoutFilmeKey.FAVORITO.toString()
                     tab.icon = getDrawable(R.drawable.ic_favorite_24px)
                 }
             }
