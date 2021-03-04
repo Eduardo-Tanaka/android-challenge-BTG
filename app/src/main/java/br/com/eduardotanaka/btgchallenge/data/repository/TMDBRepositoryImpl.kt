@@ -25,7 +25,7 @@ class TMDBRepositoryImpl @Inject constructor(
             sharedPreferences,
             CacheKey.FILME_POPULAR.toString(),
             "filmes populares",
-            TimeUnit.HOURS.toSeconds(24 * 30)
+            TimeUnit.HOURS.toSeconds(24 * 1)
         ) {
             override suspend fun getDataFromLocal(): List<FilmePopular>? {
                 return appDatabase.tmdbDao().getAll()

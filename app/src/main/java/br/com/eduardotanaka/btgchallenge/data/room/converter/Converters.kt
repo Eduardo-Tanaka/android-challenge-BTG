@@ -40,7 +40,7 @@ class Converters {
     @TypeConverter
     fun toListInt(value: String?): List<Int>? {
         return value?.let {
-            return value.split(",").map { it.toInt() }
+            return value.split(",").map { it.trim().toInt() }
         }
     }
 }
