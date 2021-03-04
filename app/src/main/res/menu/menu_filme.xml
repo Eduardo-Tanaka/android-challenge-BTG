@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/favorito"
-        android:icon="@drawable/ic_favorite_border_24px"
-        android:title="favorito"
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_24px"
+        app:iconTint="@color/white"
+        android:title="procurar"
         app:showAsAction="always"></item>
+
+    <item
+        android:id="@+id/ordenar"
+        android:icon="@drawable/ic_more_vert_24px"
+        app:iconTint="@color/white"
+        android:title="ordenar"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/ordenar_titulo"
+                android:icon="@drawable/ic_movie_filter_24px"
+                android:iconTint="@color/white"
+                android:title="titulo" />
+            <item
+                android:id="@+id/ordenar_data"
+                android:icon="@drawable/ic_filter_alt_24px"
+                android:iconTint="@color/white"
+                android:title="data" />
+        </menu>
+    </item>
+
 </menu>

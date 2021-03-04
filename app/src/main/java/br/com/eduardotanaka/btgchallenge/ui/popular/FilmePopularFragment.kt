@@ -2,13 +2,13 @@ package br.com.eduardotanaka.btgchallenge.ui.popular
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import br.com.eduardotanaka.btgchallenge.R
 import br.com.eduardotanaka.btgchallenge.constants.ExtraKey
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.databinding.FragmentFilmePopularBinding
@@ -32,6 +32,7 @@ class FilmePopularFragment : DaggerFragment() {
 
     // Scoped to the lifecycle of the fragment's view (between onCreateView and onDestroyView)
     private var fragmentFilmePopularBinding: FragmentFilmePopularBinding? = null
+    private var lista: List<FilmePopular> = ArrayList()
 
     companion object {
         fun newInstance() = FilmePopularFragment()
@@ -42,6 +43,8 @@ class FilmePopularFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
+
         val binding = FragmentFilmePopularBinding.inflate(inflater, container, false)
         fragmentFilmePopularBinding = binding
 
@@ -55,7 +58,9 @@ class FilmePopularFragment : DaggerFragment() {
                 fragmentFilmePopularBinding?.loadingListPopular?.hide()
                 fragmentFilmePopularBinding?.swipeRefresh?.isRefreshing = false
 
-                adapter = FilmePopularListAdapter(it.resource?.data!!, requireContext())
+                lista = it.resource?.data!!
+
+                adapter = FilmePopularListAdapter(lista, requireContext())
 
                 fragmentFilmePopularBinding?.rvFilmePopular?.layoutManager =
                     GridLayoutManager(requireContext(), 2)
@@ -86,6 +91,25 @@ class FilmePopularFragment : DaggerFragment() {
         })
 
         return binding.root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.search -> {
+                true
+            }
+            R.id.ordenar_titulo -> {
+                lista = lista.sortedBy { it.titulo }
+                adapter?.updateItems(lista)
+                true
+            }
+            R.id.ordenar_data -> {
+                lista = lista.sortedBy { it.data }
+                adapter?.updateItems(lista)
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onDestroyView() {

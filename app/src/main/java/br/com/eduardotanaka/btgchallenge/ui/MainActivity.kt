@@ -1,6 +1,8 @@
 package br.com.eduardotanaka.btgchallenge.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import br.com.eduardotanaka.btgchallenge.R
 import br.com.eduardotanaka.btgchallenge.constants.TabLayoutFilmeKey
 import br.com.eduardotanaka.btgchallenge.databinding.ActivityMainBinding
@@ -37,4 +39,12 @@ class MainActivity : BaseActivity() {
             }
         }.attach()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_filme, menu);
+        return true;
+    }
+
+
 }

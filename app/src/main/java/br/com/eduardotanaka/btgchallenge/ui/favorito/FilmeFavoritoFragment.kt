@@ -3,12 +3,15 @@ package br.com.eduardotanaka.btgchallenge.ui.favorito
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import br.com.eduardotanaka.btgchallenge.R
 import br.com.eduardotanaka.btgchallenge.constants.ExtraKey
 import br.com.eduardotanaka.btgchallenge.data.model.entity.FilmePopular
 import br.com.eduardotanaka.btgchallenge.databinding.FragmentFilmeFavoritoBinding
@@ -27,6 +30,7 @@ class FilmeFavoritoFragment : DaggerFragment() {
 
     // Scoped to the lifecycle of the fragment's view (between onCreateView and onDestroyView)
     private var fragmentFilmeFavorioBinding: FragmentFilmeFavoritoBinding? = null
+    private var lista: List<FilmePopular> = ArrayList()
 
     companion object {
         fun newInstance() = FilmeFavoritoFragment()
@@ -37,6 +41,8 @@ class FilmeFavoritoFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
+
         val binding = FragmentFilmeFavoritoBinding.inflate(inflater, container, false)
         fragmentFilmeFavorioBinding = binding
 
@@ -44,7 +50,8 @@ class FilmeFavoritoFragment : DaggerFragment() {
             if (it.state == StatefulResource.State.SUCCESS && it.hasData()) {
                 fragmentFilmeFavorioBinding?.loadingListFavorito?.hide()
 
-                adapter = FilmeFavoritoListAdapter(it.resource?.data!!, requireContext())
+                lista = it.resource?.data!!
+                adapter = FilmeFavoritoListAdapter(lista, requireContext())
 
                 fragmentFilmeFavorioBinding?.rvFilmeFavorito?.layoutManager =
                     GridLayoutManager(requireContext(), 2)
@@ -72,6 +79,25 @@ class FilmeFavoritoFragment : DaggerFragment() {
         super.onResume()
 
         viewModel.getFavoritos()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.search -> {
+                true
+            }
+            R.id.ordenar_titulo -> {
+                lista = lista.sortedBy { it.titulo }
+                adapter?.updateItems(lista)
+                true
+            }
+            R.id.ordenar_data -> {
+                lista = lista.sortedBy { it.data }
+                adapter?.updateItems(lista)
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onDestroyView() {
