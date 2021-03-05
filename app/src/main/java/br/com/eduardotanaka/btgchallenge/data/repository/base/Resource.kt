@@ -3,6 +3,7 @@ package br.com.eduardotanaka.btgchallenge.data.repository.base
 import br.com.eduardotanaka.btgchallenge.data.repository.helpers.DataFetchHelper
 import retrofit2.Response
 import java.io.IOException
+import java.net.UnknownHostException
 
 /**
  * A flexible resource wrapper to gather and propagate properties associated to it
@@ -55,7 +56,7 @@ class Resource<T> {
      * If a network error happened during the fetch
      * Doesn't necessarily mean "fresh" data wasn't received, see [DataFetchHelper.DataFetchStyle.LOCAL_FIRST_NETWORK_REFRESH_ALWAYS]
      */
-    fun isNetworkIssue(): Boolean = throwable is IOException
+    fun isNetworkIssue(): Boolean = throwable is IOException || throwable is UnknownHostException
 
     /**
      * If an api issue happened during the fetch

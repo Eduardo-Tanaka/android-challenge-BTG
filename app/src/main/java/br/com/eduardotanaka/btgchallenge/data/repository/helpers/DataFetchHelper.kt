@@ -325,7 +325,7 @@ abstract class DataFetchHelper<T>(
                     log("Unable to get data from network, failing over to local")
                     resource.data = getDataFromLocal()
                     resource.fresh = false
-                    resource.dataFetchStyleResult = DataFetchStyle.Result.LOCAL_DATA_NETWORK_FAIL
+                    resource.dataFetchStyleResult = Result.LOCAL_DATA_NETWORK_FAIL
                 } else {
                     resource.fresh = true
                     resource.dataFetchStyleResult = DataFetchStyle.Result.NETWORK_DATA_FIRST
@@ -377,11 +377,14 @@ abstract class DataFetchHelper<T>(
                         DataFetchStyle.LOCAL_FIRST_UNTIL_STALE
                     )
                     if (resource.data == null) {
-                        log("Unsuccessfully stored fresh data from network, getting stale data from local")
-                        resource.data = getDataFromLocal()
-                        resource.fresh = false
-                        resource.dataFetchStyleResult =
-                            DataFetchStyle.Result.LOCAL_DATA_NETWORK_FAIL
+                        if (resource.errorMessage == null) {
+                            log("Unsuccessfully stored fresh data from network, getting stale data from local")
+                            resource.data = getDataFromLocal()
+                            resource.fresh = false
+                            resource.dataFetchStyleResult = Result.LOCAL_DATA_NETWORK_FAIL
+                        } else {
+                            log("Erro ao recuperar dados da internet")
+                        }
                     } else {
                         log("Successfully stored fresh data from network")
                         resource.fresh = true

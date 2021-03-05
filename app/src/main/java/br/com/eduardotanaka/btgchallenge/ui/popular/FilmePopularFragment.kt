@@ -15,6 +15,7 @@ import br.com.eduardotanaka.btgchallenge.databinding.FragmentFilmePopularBinding
 import br.com.eduardotanaka.btgchallenge.ui.MainActivityViewModelImpl
 import br.com.eduardotanaka.btgchallenge.ui.base.StatefulResource
 import br.com.eduardotanaka.btgchallenge.ui.detalhe.DetalheFilmeActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -87,6 +88,28 @@ class FilmePopularFragment : DaggerFragment(), SearchView.OnQueryTextListener {
                         viewModel.getAll()
                     }
                 }
+            } else if (it.state == StatefulResource.State.ERROR_NETWORK) {
+                fragmentFilmePopularBinding?.loadingListPopular?.hide()
+                fragmentFilmePopularBinding?.swipeRefresh?.isRefreshing = false
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("ERRO INTERNET")
+                    .setMessage("Ocorreu um erro ao requisitar informações da internet, por favor verifique sua conexão.")
+                    .setPositiveButton("OK") { dialog, _ ->
+                        // Respond to positive button press
+                        dialog.dismiss()
+                    }
+                    .show()
+            } else if (it.state == StatefulResource.State.ERROR_API) {
+                fragmentFilmePopularBinding?.loadingListPopular?.hide()
+                fragmentFilmePopularBinding?.swipeRefresh?.isRefreshing = false
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("SERVIÇO INDISPONÍVEL")
+                    .setMessage(it.message!!)
+                    .setPositiveButton("OK") { dialog, _ ->
+                        // Respond to positive button press
+                        dialog.dismiss()
+                    }
+                    .show()
             }
         })
 

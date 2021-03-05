@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BTG Challenge</string>
     <string name="no_network_connection">no_network_connection</string>
-    <string name="service_error">service_error</string>
-    <string name="not_found">not_found</string>
+    <string name="service_error">Ocorreu um erro ao requisitar informações da internet, por favor tente novamente mais tarde.</string>
+    <string name="not_found">Nenhum filme encontrado</string>
 </resources>

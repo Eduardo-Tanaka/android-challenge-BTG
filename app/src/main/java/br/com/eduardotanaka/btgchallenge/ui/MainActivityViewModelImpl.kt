@@ -143,12 +143,21 @@ class MainActivityViewModelImpl @Inject constructor(
                             setState(StatefulResource.State.ERROR_NETWORK)
                         }
                 }
-                resource.isApiIssue() -> //TODO 4xx isn't necessarily a service error, expand this to sniff http code before saying service error
-                    mutableFilmePopularList.value = StatefulResource<List<FilmePopular>>()
-                        .apply {
-                            setState(StatefulResource.State.ERROR_API)
-                            setMessage(R.string.service_error)
-                        }
+                resource.isApiIssue() -> { //TODO 4xx isn't necessarily a service error, expand this to sniff http code before saying service error
+                    if (resource.response?.code() == 404) {
+                        mutableFilmePopularList.value = StatefulResource<List<FilmePopular>>()
+                            .apply {
+                                setState(StatefulResource.State.ERROR_API)
+                                setMessage(R.string.not_found)
+                            }
+                    } else {
+                        mutableFilmePopularList.value = StatefulResource<List<FilmePopular>>()
+                            .apply {
+                                setState(StatefulResource.State.ERROR_API)
+                                setMessage(R.string.service_error)
+                            }
+                    }
+                }
                 else -> mutableFilmePopularList.value = StatefulResource<List<FilmePopular>>()
                     .apply {
                         setState(StatefulResource.State.SUCCESS)
