@@ -15,7 +15,5 @@ interface TMDBRepository {
 
     suspend fun getFavorito(id: Int): Resource<Favorito>
 
-    suspend fun favorita(favorito: Favorito): Resource<Favorito>
-
     suspend fun getAllFavoritos(): Resource<List<FilmePopular>>
 }

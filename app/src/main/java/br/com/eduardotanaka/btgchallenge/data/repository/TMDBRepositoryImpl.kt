@@ -12,6 +12,9 @@ import br.com.eduardotanaka.btgchallenge.data.repository.base.Resource
 import br.com.eduardotanaka.btgchallenge.data.repository.helpers.DataFetchHelper
 import br.com.eduardotanaka.btgchallenge.data.room.AppDatabase
 import br.com.eduardotanaka.btgchallenge.network.TMDBService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -106,19 +109,6 @@ class TMDBRepositoryImpl @Inject constructor(
         ) {
             override suspend fun getDataFromLocal(): Favorito {
                 return appDatabase.favoritoDao().getById(id)
-            }
-        }
-
-        return dataFetchHelper.fetchDataIOAsync().await()
-    }
-
-    override suspend fun favorita(favorito: Favorito): Resource<Favorito> {
-        val dataFetchHelper = object : DataFetchHelper.LocalOnly<Favorito>(
-            TMDBRepositoryImpl::class.simpleName.toString(),
-        ) {
-            override suspend fun getDataFromLocal(): Favorito {
-                return appDatabase.favoritoDao()
-                    .getById(appDatabase.favoritoDao().insert(favorito).toInt())
             }
         }
 

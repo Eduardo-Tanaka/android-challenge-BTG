@@ -83,12 +83,14 @@ class DetalheFilmeActivity : BaseActivity() {
                     } else {
                         !result.resource?.data?.isFavorito!!
                     }
+
                     viewModelFavorito.favoritaFilme(
                         Favorito(
                             filme.movieId,
                             favoritar
                         )
                     )
+
                 }
             }
         })
