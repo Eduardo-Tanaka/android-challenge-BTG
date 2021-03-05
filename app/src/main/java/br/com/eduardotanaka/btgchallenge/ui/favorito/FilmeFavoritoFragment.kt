@@ -2,11 +2,8 @@ package br.com.eduardotanaka.btgchallenge.ui.favorito
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +18,7 @@ import br.com.eduardotanaka.btgchallenge.ui.detalhe.DetalheFilmeActivity
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class FilmeFavoritoFragment : DaggerFragment() {
+class FilmeFavoritoFragment : DaggerFragment(), SearchView.OnQueryTextListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -81,6 +78,13 @@ class FilmeFavoritoFragment : DaggerFragment() {
         viewModel.getFavoritos()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        //inflater.inflate(R.menu.menu_cow_list, menu)
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.search -> {
@@ -104,5 +108,14 @@ class FilmeFavoritoFragment : DaggerFragment() {
         // Consider not storing the binding instance in a field, if not needed.
         fragmentFilmeFavorioBinding = null
         super.onDestroyView()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        adapter?.filter?.filter(newText)
+        return false
     }
 }

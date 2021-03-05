@@ -3,7 +3,7 @@ package br.com.eduardotanaka.btgchallenge.ui.popular
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +23,7 @@ import javax.inject.Inject
  * View Binding example with a fragment that uses the alternate constructor for inflation and
  * [onViewCreated] for binding.
  */
-class FilmePopularFragment : DaggerFragment() {
+class FilmePopularFragment : DaggerFragment(), SearchView.OnQueryTextListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -93,6 +93,13 @@ class FilmePopularFragment : DaggerFragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        //inflater.inflate(R.menu.menu_cow_list, menu)
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.search -> {
@@ -116,5 +123,14 @@ class FilmePopularFragment : DaggerFragment() {
         // Consider not storing the binding instance in a field, if not needed.
         fragmentFilmePopularBinding = null
         super.onDestroyView()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        adapter?.filter?.filter(newText)
+        return false
     }
 }
